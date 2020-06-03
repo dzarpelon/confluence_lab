@@ -1,0 +1,27 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+# Define Vagrant API version, the virtualization provider and the location of the param file and its name:
+VAGRANTFILE_API_VERSION = "2"
+VIRT_PROVIDER="virtualbox"
+VM_PARAM_FILE = 'params.yml'
+
+# Require Yaml module, this is needed to read the 'params.yml' file.
+require 'yaml'
+
+# Read 'params.yml' file
+servers = YAML.load_file(File.join(File.dirname(__FILE__), VM_PARAM_FILE))
+# Create boxes as needed
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  #execute for each entry on the params file
+  servers.each do |servers|
+    config.vm.define servers["name"] do |srv|
+      srv.vm.box = servers["box"]
+      srv.vm.network servers["network_type"], ip: servers["ip"]
+      srv.vm.hostname = servers["name"]
+      srv.vm.provider VIRT_PROVIDER do |vb|
+        vb.name = servers["name"]
+        vb.memory = servers["ram"]
+      end #end provider
+    end # end config loop
+  end # end servers loop
+end
