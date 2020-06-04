@@ -4,7 +4,7 @@
 VAGRANTFILE_API_VERSION = "2"
 VIRT_PROVIDER="virtualbox"
 VM_PARAM_FILE = 'params.yml'
-#SSH_PUB_KEY =  'devops_key.pub'
+ANSIBLE_PLAYBOOK = "../ansible/playbook.yml"
 
 
 
@@ -41,7 +41,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end #end provider
       # ensure that all Vagrant machines will use the same SSH key pair.
       config.ssh.insert_key = false
-      config.vm.provision 'shell', inline: "echo #{ssh_pub_key} >> /home/vagrant/.ssh/authorized_keys", privileged: false # copy the key to the vms, this is usefull if ansible is not in use.
+      config.vm.provision "ansible" do |ansible|
+        ansible.playbook = ANSIBLE_PLAYBOOK
+        ansible.force_remote_user = TRUE
+       end #end ansible provisioning
     end # end config loop
   end # end servers loop
 end
