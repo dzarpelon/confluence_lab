@@ -31,6 +31,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #execute for each entry on the params file
   servers.each do |servers|
     config.vm.define servers["name"] do |srv|
+      
       srv.vm.box = servers["box"]
       srv.vm.network servers["network_type"], ip: servers["ip"]
       srv.vm.hostname = servers["name"]
@@ -45,6 +46,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         ansible.playbook = ANSIBLE_PLAYBOOK
         ansible.force_remote_user = TRUE
        end #end ansible provisioning
+      # test if synced folder parameter exist and setup it.
+      if VM_PARAM_FILE["synced_folder_src"]
+        config.srv.synced_folder  VM_PARAM_FILE["synced_folder_src"], VM_PARAM_FILE["synced_folder_dst"],type:"rsync",rsync__exclude: [“.vagrant/”, “.git/”, “.idea/”, “vendor/”, “var/”, “public/”],
+rsync__chown: false
+      end # end of sync_folder setup
     end # end config loop
   end # end servers loop
 end
