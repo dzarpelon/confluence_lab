@@ -4,6 +4,13 @@
 VAGRANTFILE_API_VERSION = "2"
 VIRT_PROVIDER="virtualbox"
 VM_PARAM_FILE = 'params.yml'
+#SSH_PUB_KEY =  'devops_key.pub'
+
+
+
+#define secure ssh key location
+ssh_pub_key = File.readlines("#{Dir.home}/.ssh/devops_key.pub").first.strip
+
 
 # Require Yaml module, this is needed to read the 'params.yml' file.
 require 'yaml'
@@ -12,16 +19,29 @@ require 'yaml'
 servers = YAML.load_file(File.join(File.dirname(__FILE__), VM_PARAM_FILE))
 # Create boxes as needed
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.cache.scope = :box
+  end #end of cache plugin configuration
+  if Vagrant.has_plugin?("vagrant-hostmanager")
+    config.hostmanager.enabled = true
+    config.hostmanager.manage_host = true
+    config.hostmanager.ignore_private_ip = false
+    config.hostmanager.include_offline = true
+  end
   #execute for each entry on the params file
   servers.each do |servers|
     config.vm.define servers["name"] do |srv|
       srv.vm.box = servers["box"]
       srv.vm.network servers["network_type"], ip: servers["ip"]
       srv.vm.hostname = servers["name"]
-      srv.vm.provider VIRT_PROVIDER do |vb|
-        vb.name = servers["name"]
-        vb.memory = servers["ram"]
+      srv.hostsupdater.aliases = [servers["name"]]
+      srv.vm.provider VIRT_PROVIDER do |v|
+        v.name = servers["name"]
+        v.memory = servers["ram"]
       end #end provider
+      # ensure that all Vagrant machines will use the same SSH key pair.
+      config.ssh.insert_key = false
+      config.vm.provision 'shell', inline: "echo #{ssh_pub_key} >> /home/vagrant/.ssh/authorized_keys", privileged: false # copy the key to the vms, this is usefull if ansible is not in use.
     end # end config loop
   end # end servers loop
 end
