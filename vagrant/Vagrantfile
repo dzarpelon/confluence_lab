@@ -4,21 +4,21 @@
 VAGRANTFILE_API_VERSION = "2"
 VIRT_PROVIDER="virtualbox"
 VM_PARAM_FILE = 'params.yml'
-ANSIBLE_PLAYBOOK = "../ansible/playbook.yml"
-
-
-
+ANSIBLE_PLAYBOOK = "/Users/dzarpelon/Documents/DevOps/Projects/Confluence_Lab/ansible/playbook.yml"
 #define secure ssh key location
 ssh_pub_key = File.readlines("#{Dir.home}/.ssh/devops_key.pub").first.strip
-
-
 # Require Yaml module, this is needed to read the 'params.yml' file.
 require 'yaml'
-
 # Read 'params.yml' file
 servers = YAML.load_file(File.join(File.dirname(__FILE__), VM_PARAM_FILE))
 # Create boxes as needed
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.provision "ansible" do |ansible|
+      ansible.playbook = ANSIBLE_PLAYBOOK
+      ansible.force_remote_user = TRUE
+  end #end ansible provisioning
+  # ensure that all Vagrant machines will use the same SSH key pair.
+  config.ssh.insert_key = false
   if Vagrant.has_plugin?("vagrant-cachier")
     config.cache.scope = :box
   end #end of cache plugin configuration
@@ -27,11 +27,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.hostmanager.manage_host = true
     config.hostmanager.ignore_private_ip = false
     config.hostmanager.include_offline = true
-  end
+  end # end of hostmanager plugin
   #execute for each entry on the params file
   servers.each do |servers|
     config.vm.define servers["name"] do |srv|
-      
       srv.vm.box = servers["box"]
       srv.vm.network servers["network_type"], ip: servers["ip"]
       srv.vm.hostname = servers["name"]
@@ -40,17 +39,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         v.name = servers["name"]
         v.memory = servers["ram"]
       end #end provider
-      # ensure that all Vagrant machines will use the same SSH key pair.
-      config.ssh.insert_key = false
-      config.vm.provision "ansible" do |ansible|
-        ansible.playbook = ANSIBLE_PLAYBOOK
-        ansible.force_remote_user = TRUE
-       end #end ansible provisioning
-      # test if synced folder parameter exist and setup it.
-      if VM_PARAM_FILE["synced_folder_src"]
-        config.srv.synced_folder  VM_PARAM_FILE["synced_folder_src"], VM_PARAM_FILE["synced_folder_dst"],type:"rsync",rsync__exclude: [“.vagrant/”, “.git/”, “.idea/”, “vendor/”, “var/”, “public/”],
-rsync__chown: false
-      end # end of sync_folder setup
     end # end config loop
   end # end servers loop
-end
+
+
+end #end of Vagrant.Configure

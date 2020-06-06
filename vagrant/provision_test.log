@@ -1,0 +1,75 @@
+Bringing machine 'proxy-1' up with 'virtualbox' provider...
+Bringing machine 'db1' up with 'virtualbox' provider...
+Bringing machine 'test3' up with 'virtualbox' provider...
+==> proxy-1: Checking if box 'bento/centos-8.1' version '202005.21.0' is up to date...
+==> proxy-1: [vagrant-hostsupdater] Checking for host entries
+==> proxy-1: [vagrant-hostsupdater]   found entry for: 192.168.1.10 proxy-1
+==> proxy-1: [vagrant-hostsupdater]   found entry for: 192.168.1.10 proxy-1
+==> proxy-1: Configuring cache buckets...
+==> proxy-1: Running provisioner: ansible...
+    proxy-1: Running ansible-playbook...
+
+PLAY [Copy SSH key] ************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [proxy-1]
+
+TASK [Copy private ssh key] ****************************************************
+ok: [proxy-1]
+[WARNING]: Could not match supplied host pattern, ignoring: proxy
+
+PLAY [Install Nginx] ***********************************************************
+skipping: no hosts matched
+
+PLAY RECAP *********************************************************************
+proxy-1                    : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+==> proxy-1: Configuring cache buckets...
+==> db1: Checking if box 'bento/centos-8.1' version '202005.21.0' is up to date...
+==> db1: [vagrant-hostsupdater] Checking for host entries
+==> db1: [vagrant-hostsupdater]   found entry for: 192.168.1.11 db1
+==> db1: [vagrant-hostsupdater]   found entry for: 192.168.1.11 db1
+==> db1: Configuring cache buckets...
+==> db1: Running provisioner: ansible...
+    db1: Running ansible-playbook...
+
+PLAY [Copy SSH key] ************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [db1]
+
+TASK [Copy private ssh key] ****************************************************
+ok: [db1]
+[WARNING]: Could not match supplied host pattern, ignoring: proxy
+
+PLAY [Install Nginx] ***********************************************************
+skipping: no hosts matched
+
+PLAY RECAP *********************************************************************
+db1                        : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+==> db1: Configuring cache buckets...
+==> test3: Checking if box 'bento/centos-8.1' version '202005.21.0' is up to date...
+==> test3: [vagrant-hostsupdater] Checking for host entries
+==> test3: [vagrant-hostsupdater]   found entry for: 192.168.1.12 test3
+==> test3: [vagrant-hostsupdater]   found entry for: 192.168.1.12 test3
+==> test3: Configuring cache buckets...
+==> test3: Running provisioner: ansible...
+    test3: Running ansible-playbook...
+
+PLAY [Copy SSH key] ************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [test3]
+
+TASK [Copy private ssh key] ****************************************************
+ok: [test3]
+[WARNING]: Could not match supplied host pattern, ignoring: proxy
+
+PLAY [Install Nginx] ***********************************************************
+skipping: no hosts matched
+
+PLAY RECAP *********************************************************************
+test3                      : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+==> test3: Configuring cache buckets...

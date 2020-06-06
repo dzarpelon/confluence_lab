@@ -1,0 +1,11 @@
+
+- name: Copy SSH key
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Copy private ssh key
+      authorized_key:
+        user: vagrant
+        state: present
+        key: " {{ lookup('file','/Users/dzarpelon/.ssh/devops_key.pub') }} "

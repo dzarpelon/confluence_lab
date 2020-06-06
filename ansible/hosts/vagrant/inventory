@@ -1,2 +1,5 @@
 [proxy]
-proxy-1 ansible_user=vagrant ansible_ssh_private_key_file="~/.ssh/devops_key"
+    proxy-1 ansible_user=vagrant ansible_ssh_private_key_file="~/.ssh/devops_key"
+
+[db]
+    db-1 ansible_user=vagrant ansible_ssh_private_key_file="~/.ssh/devops_key"

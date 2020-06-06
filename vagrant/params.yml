@@ -4,16 +4,16 @@
   ram: 1024
   ip: 192.168.1.10
   network_type: private_network
-  synced_folder_src: "synced/"
-  synced_folder_dst: "/usr/share/nginx/html/"
+  # synced_folder_src: "synced/"
+  # synced_folder_dst: "/usr/share/nginx/html/"
 
-# - name: test2
-#   box: bento/centos-8.1
-#   ram: 512
-#   ip: 192.168.1.11
-#   network_type: private_network
-# - name: test3
-#   box: bento/centos-8.1
-#   ram: 2048
-#   ip: 192.168.1.12
-#   network_type: private_network
+- name: db1
+  box: bento/centos-8.1
+  ram: 512
+  ip: 192.168.1.11
+  network_type: private_network
+- name: test3
+  box: bento/centos-8.1
+  ram: 2048
+  ip: 192.168.1.12
+  network_type: private_network

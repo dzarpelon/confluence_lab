@@ -1,0 +1,1 @@
+{"virtualbox":{"/vagrant":{"guestpath":"/vagrant","hostpath":"/Users/dzarpelon/Documents/DevOps/Projects/Confluence_Lab/vagrant","disabled":false,"__vagrantfile":true},"vagrant-cache":{"id":"vagrant-cache","guestpath":"/tmp/vagrant-cache","hostpath":"/Users/dzarpelon/.vagrant.d/cache/bento/centos-8.1","disabled":false,"__vagrantfile":true}}}
